@@ -1,0 +1,64 @@
+{
+ "name": "@thechatshop/bold360-client",
+ "version": "0.0.0",
+ "description": "An http client to communicate with bold360 API.",
+ "main": "src/index.js",
+ "scripts": {
+  "dev": "nodemon ./src/index.js",
+  "lint": "xo",
+  "prettier": "prettier **/*.js",
+  "precommit": "lint-staged",
+  "prepush": "npm test",
+  "test": "jest"
+ },
+ "keywords": [],
+ "author": "ThanosDi",
+ "license": "ISC",
+ "dependencies": {
+  "js-sha512": "^0.8.0",
+  "node-fetch": "^2.6.0",
+  "query-string": "^6.10.1",
+  "ramda": "^0.27.0"
+ },
+ "devDependencies": {
+  "@types/jest": "^25.1.2",
+  "@types/ramda": "^0.26.41",
+  "eslint-config-prettier": "^6.10.0",
+  "husky": "^1.0.1",
+  "jest": "^25.1.0",
+  "jest-extended": "^0.11.5",
+  "jest-fetch-mock": "^3.0.1",
+  "lint-staged": "^10.0.7",
+  "nodemon": "^2.0.2",
+  "prettier": "^1.10.2",
+  "xo": "^0.25.3"
+ },
+ "lint-staged": {
+  "*": [
+   "xo --fix",
+   "git add"
+  ]
+ },
+ "xo": {
+  "prettier": true,
+  "envs": [
+   "jest",
+   "node",
+   "browser"
+  ],
+  "rules": {
+   "camelcase": 1
+  }
+ },
+ "jest": {
+  "setupFilesAfterEnv": [
+   "jest-extended"
+  ]
+ },
+ "husky": {
+  "hooks": {
+   "pre-commit": "lint-staged",
+   "pre-push": "yarn test"
+  }
+ }
+}
