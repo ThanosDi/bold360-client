@@ -1,6 +1,6 @@
 {
 	"name": "bold360-client",
-	"version": "0.0.0",
+	"version": "0.0.1",
 	"description": "An http client to communicate with bold360 API.",
 	"main": "src/index.js",
 	"scripts": {
