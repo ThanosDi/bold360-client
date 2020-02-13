@@ -1,34 +1,68 @@
+aliases:
+  - &restore-yarn-cache
+    name: Restore package Cache
+    key: yarn-packages-{{ checksum "yarn.lock" }}
+
+  - &npmrc |
+    echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" >> ~/.npmrc
+
+  - &save-yarn-cache
+    name: Save package Cache
+    paths:
+      - node_modules
+      - ~/.cache/yarn
+    key: yarn-packages-{{ checksum "yarn.lock" }}
+
+  - &yarn-install |
+    yarn install --non-interactive --cache-folder ~/.cache/yarn
+
+  - &yarn-test |
+    yarn test
+
+  - &yarn-test-ci |
+    yarn test-ci
+
+  - &yarn-publish |
+    yarn publish
+
 version: 2
 workflows:
   version: 2
   build_and_deploy:
     jobs:
       - build:
-          context: NPM_TOKEN
+          context: ThanosDi
+          filters:
+            tags:
+              only: /.*/
       - npm_publish:
-          context: NPM_TOKEN
+          context: ThanosDi
           requires:
             - build
           filters:
-            branches:
-              only: master
             tags:
-              only: /^v[\d.]+$/
+              only: /^v.*/
+            branches:
+              ignore: /.*/
 jobs:
   build:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - checkout
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-      - run: npm install
-      - run: npm test
+      - restore_cache: *restore-yarn-cache
+      - run: *npmrc
+      - run: *yarn-install
+      - save_cache: *save-yarn-cache
+      - run: *yarn-test
+
   npm_publish:
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:10
     steps:
       - checkout
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-      - run: npm install
-      - run: npm publish
-
+      - restore_cache: *restore-yarn-cache
+      - run: *npmrc
+      - run: *yarn-install
+      - save_cache: *save-yarn-cache
+      - run: *yarn-publish
