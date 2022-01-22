@@ -23,7 +23,7 @@
 	"author": "ThanosDi",
 	"dependencies": {
 		"js-sha512": "^0.8.0",
-		"node-fetch": "^2.6.0",
+		"node-fetch": "^3.1.1",
 		"query-string": "^6.10.1",
 		"ramda": "^0.27.0"
 	},
